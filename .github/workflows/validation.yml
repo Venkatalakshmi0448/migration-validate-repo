@@ -1,0 +1,56 @@
+name: Validate Pipeline Migration
+on:
+  workflow_call:
+    inputs:
+      branch:
+        description: 'Branch to validate'
+        required: true
+        type: string
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    environment:
+      name: 'validate'
+    
+    strategy:
+      matrix:
+        step: ['checkout', 'build', 'test', 'deploy']
+        
+    steps:
+      # Checkout step
+      - name: Checkout code
+        if: matrix.step == 'checkout'
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ inputs.branch }}
+
+      # Build step
+      - name: Build project
+        if: matrix.step == 'build'
+        run: |
+          echo "Building project..."
+          # Add actual build commands here (e.g., npm)
+          
+      # Test step
+      - name: Run tests
+        if: matrix.step == 'test'
+        run: |
+          echo "Running tests..."
+          # Add test commands (e.g., npm test)
+          
+      # Deployment step
+      - name: Deploy project
+        if: matrix.step == 'deploy'
+        run: |
+          echo "Deploying project..."
+          # Add deployment commands (e.g., Docker push)
+          
+  validate-environment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if environment variables are set
+        run: |
+          echo "Validating Environment Variables"
+          echo "ENV_VAR_1 = ${{ secrets.ENV_VAR_1 }}"
+          echo "ENV_VAR_2 = ${{ secrets.ENV_VAR_2 }}"
