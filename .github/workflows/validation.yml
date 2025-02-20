@@ -1,6 +1,6 @@
 name: Validate Pipeline Migration
 on:
-  pull_request:
+  push:
     branches:
       - main
   workflow_call:
